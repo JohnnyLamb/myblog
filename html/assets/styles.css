@@ -1,0 +1,220 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+JP:wght@400;700&display=swap');
+
+:root {
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --text-color: oklch(0.145 0 0);
+  --dimmed-text-color: #777;
+  --background-color: #fff;
+  --link-color: #0066cc;
+  --link-hover-color: #0056b3;
+  --border-color: #aaa;
+  --max-width: 44rem;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 18px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-serif);
+  color: var(--text-color);
+  background-color: var(--background-color);
+  line-height: 1.5;
+}
+
+p {
+  margin-bottom: 1.5rem;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-sans);
+  font-weight: 800;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+}
+
+h1 {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+h4 {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+a {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--link-color);
+}
+
+.site-header,
+.site-footer,
+.site-main {
+  width: min(92vw, var(--max-width));
+  margin: 0 auto;
+}
+
+.site-header {
+  padding: 2.5rem 0 1.5rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.site-title {
+  font-family: var(--font-sans);
+  font-size: 1.2rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.site-nav a {
+  margin-left: 1rem;
+  color: var(--dimmed-text-color);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.site-nav a:hover {
+  color: var(--link-color);
+}
+
+.site-main {
+  padding: 2rem 0 3rem;
+}
+
+.hero-mark {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto 2rem;
+}
+
+.hero-mark img {
+  width: min(70vw, 360px);
+  height: auto;
+}
+
+.hero {
+  margin-bottom: 2.5rem;
+}
+
+.hero h1 {
+  font-size: clamp(2.4rem, 3vw, 3.2rem);
+  margin-bottom: 0.5rem;
+}
+
+.lead {
+  color: var(--dimmed-text-color);
+  font-size: 1.1rem;
+}
+
+.posts h2 {
+  font-size: 1.2rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+
+.post-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.post-list li {
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+  /* border-bottom: 1px solid var(--border-color); */
+  padding-bottom: 0.6rem;
+}
+
+.post-list a {
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 1.05rem;
+}
+
+.post-list a:hover {
+  color: var(--link-color);
+}
+
+.post-list time {
+  color: var(--dimmed-text-color);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.post h1 {
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  margin-bottom: 0.4rem;
+}
+
+.post-meta {
+  color: var(--dimmed-text-color);
+  margin-top: 0;
+  margin-bottom: 1.8rem;
+}
+
+.site-footer {
+  padding: 1.5rem 0 3rem;
+  border-top: 1px solid var(--border-color);
+  color: var(--dimmed-text-color);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 640px) {
+  .site-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  .site-nav a {
+    margin-left: 0;
+    margin-right: 1rem;
+  }
+
+  .post-list li {
+    flex-direction: column;
+    gap: 0.3rem;
+    align-items: flex-start;
+  }
+}
