@@ -6,16 +6,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{{title}}</title>
   <meta name="description" content="{{description}}" />
-    <link rel="stylesheet" href="{{site.baseUrl}}/assets/styles.css" />
+  <link rel="stylesheet" href="{{site.baseUrl}}/assets/styles.css" />
 </head>
 
 <body>
   <header class="site-header">
-      <a class="site-title" href="{{site.baseUrl}}/">{{site.title}}</a>
-      <nav class="site-nav">
-        <a href="{{site.baseUrl}}/">Home</a>
-        <a href="{{site.baseUrl}}/about/">About</a>
-      </nav>
+    <a class="site-title" href="{{site.baseUrl}}/">{{site.title}}</a>
+    <nav class="site-nav">
+      <a href="{{site.baseUrl}}/">Home</a>
+      <a href="{{site.baseUrl}}/about/">About</a>
+    </nav>
+    <button class="theme-toggle" type="button" id="theme-toggle" aria-pressed="false">Dark</button>
   </header>
 
   <main class="site-main">
@@ -25,6 +26,7 @@
   <footer class="site-footer">
     <span>{{year}} {{site.title}}</span>
   </footer>
+  <script src="{{site.baseUrl}}/assets/theme.js"></script>
 </body>
 
 </html>
