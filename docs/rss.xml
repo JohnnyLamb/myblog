@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+  <title>J.A. Lamb</title>
+  <link>https://jlamb.dev</link>
+  <description>A minimal, readable publishing pipeline.</description>
+  <item>
+    <title>Rolling my own static site generator</title>
+    <link>https://jlamb.dev/posts/rolling-my-own-static-site-generator/</link>
+    <guid isPermaLink="true">https://jlamb.dev/posts/rolling-my-own-static-site-generator/</guid>
+    <pubDate>Sun, 01 Feb 2026 00:00:00 GMT</pubDate>
+    <description>A small pipeline I can explain end to end.</description>
+  </item>
+  <item>
+    <title>Why static is still enough</title>
+    <link>https://jlamb.dev/posts/why-static/</link>
+    <guid isPermaLink="true">https://jlamb.dev/posts/why-static/</guid>
+    <pubDate>Thu, 15 Jan 2026 00:00:00 GMT</pubDate>
+    <description>The simplest pipeline is the one you can explain.</description>
+  </item>
+</channel>
+</rss>

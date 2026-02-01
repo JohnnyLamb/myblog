@@ -32,6 +32,13 @@ build.js          Generator
 - `permalink` in frontmatter overrides output path
  - Site metadata lives in `src/_data/site.json`
  - If `domain` is set in `src/_data/site.json`, a `CNAME` file is written to the output folder
+ - `draft: true` in frontmatter excludes a page/post from sitemap, RSS, and posts.json
+
+## Generated files
+
+- `docs/sitemap.xml`
+- `docs/rss.xml`
+- `docs/posts.json`
 
 ## Posting
 

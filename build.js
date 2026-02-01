@@ -244,6 +244,29 @@ function computeUrl(outDir, outPath) {
   return `/${rel}`;
 }
 
+function joinUrl(base, pathname) {
+  if (!base) return pathname;
+  const cleanBase = base.replace(/\/$/, '');
+  const cleanPath = pathname.startsWith('/') ? pathname : `/${pathname}`;
+  return `${cleanBase}${cleanPath}`;
+}
+
+function escapeXml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+function stripHtml(value) {
+  return String(value)
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 /**
  * Main build function. Processes all source files and generates the static site.
  * - Reads site config from _data/site.json
@@ -274,6 +297,7 @@ function buildSite({ inDir, outDir, clean }) {
     title: 'J.A. Lamb',
     description: 'A minimal, readable publishing pipeline.',
     baseUrl: '',
+    url: '',
   };
   const siteDataPath = path.join(srcDir, '_data', 'site.json');
   if (fs.existsSync(siteDataPath)) {
@@ -284,6 +308,10 @@ function buildSite({ inDir, outDir, clean }) {
       console.error('Invalid _data/site.json; using defaults.');
     }
   }
+
+  const basePrefix = site.baseUrl ? site.baseUrl.replace(/\/$/, '') : '';
+  const siteUrl = site.url || (site.domain ? `https://${site.domain}` : '');
+  const siteRoot = siteUrl ? `${siteUrl}${basePrefix}` : basePrefix;
 
   for (const file of files) {
     const relPath = path.relative(srcDir, file);
@@ -305,6 +333,7 @@ function buildSite({ inDir, outDir, clean }) {
     const parsed = matter(raw);
     const data = parsed.data || {};
     const body = parsed.content || '';
+    const summary = data.summary || data.description || '';
 
     const baseName = path.basename(file, ext);
     const inferredDate = inferDateFromFilename(baseName);
@@ -327,6 +356,7 @@ function buildSite({ inDir, outDir, clean }) {
       relPath,
       ext,
       data,
+      summary,
       htmlContent,
       outPath,
       urlPath,
@@ -348,7 +378,6 @@ function buildSite({ inDir, outDir, clean }) {
       return a.slug.localeCompare(b.slug);
     });
 
-  const basePrefix = site.baseUrl ? site.baseUrl.replace(/\/$/, '') : '';
   const postsHtml = posts
     .map((post) => {
       const date = post.dateISO ? `<time datetime="${post.dateISO}">${post.dateHuman}</time>` : '';
@@ -365,13 +394,14 @@ function buildSite({ inDir, outDir, clean }) {
       slug: entry.slug,
       date: entry.dateISO,
       dateHuman: entry.dateHuman,
+      summary: entry.summary,
     };
 
     const context = {
       site,
       page,
       title: page.title || site.title,
-      description: page.description || site.description,
+      description: page.summary || page.description || site.description,
       url: page.url,
       date: page.date,
       dateHuman: page.dateHuman,
@@ -393,6 +423,75 @@ function buildSite({ inDir, outDir, clean }) {
     ensureDir(path.dirname(entry.outPath));
     fs.writeFileSync(entry.outPath, finalHtml);
   }
+
+  const sitemapItems = entries
+    .filter((entry) => !entry.data.draft)
+    .map((entry) => {
+      const loc = joinUrl(siteRoot, entry.urlPath);
+      const lastmod = entry.dateISO
+        || new Date(fs.statSync(entry.srcPath).mtime).toISOString().slice(0, 10);
+      return `  <url><loc>${escapeXml(loc)}</loc><lastmod>${lastmod}</lastmod></url>`;
+    })
+    .join('\n');
+
+  const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>\n` +
+    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+    `${sitemapItems}\n` +
+    `</urlset>\n`;
+  fs.writeFileSync(path.join(targetDir, 'sitemap.xml'), sitemapXml);
+
+  const rssItems = posts
+    .filter((post) => !post.data.draft)
+    .map((post) => {
+      const link = joinUrl(siteRoot, post.urlPath);
+      const description = escapeXml(post.summary || '');
+      const pubDate = post.dateObj ? post.dateObj.toUTCString() : new Date().toUTCString();
+      return [
+        '  <item>',
+        `    <title>${escapeXml(post.title)}</title>`,
+        `    <link>${escapeXml(link)}</link>`,
+        `    <guid isPermaLink="true">${escapeXml(link)}</guid>`,
+        `    <pubDate>${pubDate}</pubDate>`,
+        `    <description>${description}</description>`,
+        '  </item>',
+      ].join('\n');
+    })
+    .join('\n');
+
+  const rssXml = `<?xml version="1.0" encoding="UTF-8"?>\n` +
+    `<rss version="2.0">\n` +
+    `<channel>\n` +
+    `  <title>${escapeXml(site.title)}</title>\n` +
+    `  <link>${escapeXml(siteRoot || '/')}</link>\n` +
+    `  <description>${escapeXml(site.description)}</description>\n` +
+    `${rssItems}\n` +
+    `</channel>\n` +
+    `</rss>\n`;
+  fs.writeFileSync(path.join(targetDir, 'rss.xml'), rssXml);
+
+  const postsJson = posts
+    .filter((post) => !post.data.draft)
+    .map((post) => ({
+      title: post.title,
+      date: post.dateISO,
+      summary: post.summary,
+      url: joinUrl(siteRoot, post.urlPath),
+      path: post.urlPath,
+      slug: post.slug,
+      content_html: post.htmlContent,
+      content_text: stripHtml(post.htmlContent),
+    }));
+
+  const postsJsonPayload = {
+    generatedAt: new Date().toISOString(),
+    site: {
+      title: site.title,
+      description: site.description,
+      url: siteRoot,
+    },
+    posts: postsJson,
+  };
+  fs.writeFileSync(path.join(targetDir, 'posts.json'), `${JSON.stringify(postsJsonPayload, null, 2)}\n`);
 
   if (site.domain) {
     const cnamePath = path.join(targetDir, 'CNAME');
