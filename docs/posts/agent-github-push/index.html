@@ -58,12 +58,10 @@
   <p>Everyone demos code generation. Few ship it.</p>
 <p>The agent runs in a Docker sandbox. It clones a repo, makes changes, commits, and pushes. Real git operations, real authentication, real consequences.</p>
 <p>The tricky part was GitHub App authentication. Installation tokens expire. The sandbox needs fresh credentials each run. The solution was generating tokens on demand:</p>
-<pre><code class="language-typescript">const { token } = await octokit.rest.apps.createInstallationAccessToken({
-    installation_id: installationId
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> { token } = <span class="hljs-keyword">await</span> octokit.<span class="hljs-property">rest</span>.<span class="hljs-property">apps</span>.<span class="hljs-title function_">createInstallationAccessToken</span>({
+    <span class="hljs-attr">installation_id</span>: installationId
 })
-const cloneUrl = `https://x-access-token:${token}@github.com/${repo}.git`
-</code></pre>
-<p>The sandbox clones with the token URL, does its work, and pushes. No SSH keys to manage, no stored credentials. The token lives only as long as the agent needs it.</p>
+<span class="hljs-keyword">const</span> cloneUrl = <span class="hljs-string">`https://x-access-token:<span class="hljs-subst">${token}</span>@github.com/<span class="hljs-subst">${repo}</span>.git`</span></code></pre><p>The sandbox clones with the token URL, does its work, and pushes. No SSH keys to manage, no stored credentials. The token lives only as long as the agent needs it.</p>
 <p>Now the agent&#39;s output lands in a real repository. You can review it, merge it, or reject it. That feedback loop is what makes the whole system useful.</p>
 
 </section>

@@ -58,14 +58,12 @@
   <p>Agents loop. They read files, think about reading more files, then read the same files again. Without structure, they wander.</p>
 <p>GSD (Get Shit Done) is a protocol. It gives the agent phases: GATHER, IMPLEMENT, VERIFY, COMPLETE. Each phase has one job. Do the job, update state, move on.</p>
 <p>The key insight was XML tasks. Instead of free-form reasoning, the agent generates structured plans:</p>
-<pre><code class="language-xml">&lt;task&gt;
-  &lt;name&gt;Create user model&lt;/name&gt;
-  &lt;action&gt;Write src/models/user.ts with id, email, createdAt fields&lt;/action&gt;
-  &lt;verify&gt;File exists and exports User type&lt;/verify&gt;
-  &lt;done&gt;User model created&lt;/done&gt;
-&lt;/task&gt;
-</code></pre>
-<p>Each task is atomic. The agent executes one, verifies it worked, then moves to the next. No backtracking, no infinite loops.</p>
+<pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">task</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">name</span>&gt;</span>Create user model<span class="hljs-tag">&lt;/<span class="hljs-name">name</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">action</span>&gt;</span>Write src/models/user.ts with id, email, createdAt fields<span class="hljs-tag">&lt;/<span class="hljs-name">action</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">verify</span>&gt;</span>File exists and exports User type<span class="hljs-tag">&lt;/<span class="hljs-name">verify</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">done</span>&gt;</span>User model created<span class="hljs-tag">&lt;/<span class="hljs-name">done</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">task</span>&gt;</span></code></pre><p>Each task is atomic. The agent executes one, verifies it worked, then moves to the next. No backtracking, no infinite loops.</p>
 <p>The integration required two functions: <code>planLoop()</code> generates the XML tasks from requirements. <code>executeLoop()</code> runs them sequentially with verification.</p>
 <p>The agent now finishes what it starts. That is the whole point of GSD.</p>
 

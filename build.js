@@ -5,6 +5,7 @@ const http = require('http');
 const url = require('url');
 const matter = require('gray-matter');
 const { marked } = require('marked');
+const hljs = require('highlight.js');
 
 const DEFAULT_IN = 'src';
 const DEFAULT_OUT = 'docs';
@@ -13,6 +14,19 @@ const INCLUDE_DIR = '_includes';
 const LAYOUT_DIR = '_layouts';
 
 marked.setOptions({ mangle: false, headerIds: false });
+marked.use({
+  renderer: {
+    code(code, infostring) {
+      const language = (infostring || '').trim().split(/\s+/)[0];
+      const hasLanguage = language && hljs.getLanguage(language);
+      const highlighted = hasLanguage
+        ? hljs.highlight(code, { language }).value
+        : hljs.highlightAuto(code).value;
+      const className = hasLanguage ? `hljs language-${language}` : 'hljs';
+      return `<pre><code class="${className}">${highlighted}</code></pre>`;
+    },
+  },
+});
 
 /**
  * Parses command-line arguments and returns configuration options.

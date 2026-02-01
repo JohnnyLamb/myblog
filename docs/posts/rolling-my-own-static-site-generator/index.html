@@ -58,13 +58,11 @@
   <p>I did not want a website product. I wanted a publishing pipeline I could understand in one sitting.</p>
 <p>The appeal was clarity: every step from Markdown to HTML is visible, and every file exists for a reason. There is no plugin marketplace to maintain, no theme layer to decode, and no magic I cannot explain later.</p>
 <p>Pipeline diagram:</p>
-<pre><code>src/posts/*.md
+<pre><code class="hljs">src<span class="hljs-regexp">/posts/</span>*.md
   -&gt; frontmatter
   -&gt; markdown -&gt; html
   -&gt; layout wrap
-  -&gt; docs/posts/&lt;slug&gt;/index.html
-</code></pre>
-<p>Tradeoffs I am accepting:</p>
+  -&gt; docs<span class="hljs-regexp">/posts/</span>&lt;slug&gt;/index.html</code></pre><p>Tradeoffs I am accepting:</p>
 <ul>
 <li>No plugin ecosystem</li>
 <li>No one-click themes</li>

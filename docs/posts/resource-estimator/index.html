@@ -58,18 +58,14 @@
   <p>I needed a resource estimator for system design calculations. Instead of inventing something, I studied what already worked.</p>
 <p>System Design School has a clean tool for this. Two columns: educational content on the left, calculator on the right. Reference tables at the bottom. No magic, just useful.</p>
 <p>The implementation took three files:</p>
-<pre><code>src/lib/estimator/calculations.ts   # Pure math
-src/components/estimator/           # React component
-src/app/tools/estimator/            # Route + layout
-</code></pre>
-<p>The calculations file exports pure functions. No state, no side effects. Easy to test, easy to trust.</p>
-<pre><code class="language-typescript">export function calculateEstimates(inputs: EstimatorInputs): EstimatorOutputs {
-    const secondsPerDay = inputs.precisionMode ? 86_400 : 100_000
-    const readsPerSecond = (inputs.dau * inputs.readsPerUser) / secondsPerDay
-    // ...
-}
-</code></pre>
-<p>The component handles inputs and renders outputs. The reference tables for image sizes, video bitrates, and storage latency are just static data. No API calls, no loading states.</p>
+<pre><code class="hljs">src<span class="hljs-regexp">/lib/</span>estimator/calculations.ts   <span class="hljs-comment"># Pure math</span>
+src<span class="hljs-regexp">/components/</span>estimator/           <span class="hljs-comment"># React component</span>
+src<span class="hljs-regexp">/app/</span>tools<span class="hljs-regexp">/estimator/</span>            <span class="hljs-comment"># Route + layout</span></code></pre><p>The calculations file exports pure functions. No state, no side effects. Easy to test, easy to trust.</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">calculateEstimates</span>(<span class="hljs-params"><span class="hljs-attr">inputs</span>: <span class="hljs-title class_">EstimatorInputs</span></span>): <span class="hljs-title class_">EstimatorOutputs</span> {
+    <span class="hljs-keyword">const</span> secondsPerDay = inputs.<span class="hljs-property">precisionMode</span> ? <span class="hljs-number">86_400</span> : <span class="hljs-number">100_000</span>
+    <span class="hljs-keyword">const</span> readsPerSecond = (inputs.<span class="hljs-property">dau</span> * inputs.<span class="hljs-property">readsPerUser</span>) / secondsPerDay
+    <span class="hljs-comment">// ...</span>
+}</code></pre><p>The component handles inputs and renders outputs. The reference tables for image sizes, video bitrates, and storage latency are just static data. No API calls, no loading states.</p>
 <p>The hardest part was the layout. I wanted the tool to live at <code>/tools/estimator</code> but still show the same sidebar as the dashboard. That meant duplicating the layout logic, which felt wrong until I realized: consistency for the user matters more than DRY for the developer.</p>
 <p>The whole thing works offline. You can reason about it by reading the code. That is the feature.</p>
 
