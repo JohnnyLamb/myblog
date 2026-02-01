@@ -393,6 +393,11 @@ function buildSite({ inDir, outDir, clean }) {
     ensureDir(path.dirname(entry.outPath));
     fs.writeFileSync(entry.outPath, finalHtml);
   }
+
+  if (site.domain) {
+    const cnamePath = path.join(targetDir, 'CNAME');
+    fs.writeFileSync(cnamePath, `${site.domain}\n`);
+  }
 }
 
 /**

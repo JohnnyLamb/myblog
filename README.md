@@ -30,7 +30,8 @@ build.js          Generator
 - `_`-prefixed files/dirs are ignored for output but can be used for layouts/includes/data
 - Posts are any files under `src/posts/` and compile to `/posts/<slug>/`
 - `permalink` in frontmatter overrides output path
- - Site metadata lives in `src/_data/site.json`
+- Site metadata lives in `src/_data/site.json`
+ - If `domain` is set in `src/_data/site.json`, a `CNAME` file is written to the output folder
 
 ## Frontmatter
 
