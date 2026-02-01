@@ -348,11 +348,12 @@ function buildSite({ inDir, outDir, clean }) {
       return a.slug.localeCompare(b.slug);
     });
 
+  const basePrefix = site.baseUrl ? site.baseUrl.replace(/\/$/, '') : '';
   const postsHtml = posts
     .map((post) => {
       const date = post.dateISO ? `<time datetime="${post.dateISO}">${post.dateHuman}</time>` : '';
       const spacer = date ? ' ' : '';
-      return `<li><a href="${post.urlPath}">${post.title}</a>${spacer}${date}</li>`;
+      return `<li><a href="${basePrefix}${post.urlPath}">${post.title}</a>${spacer}${date}</li>`;
     })
     .join('\n');
 
