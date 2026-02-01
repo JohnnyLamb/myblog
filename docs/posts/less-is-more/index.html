@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The smallest agent is the one that fits in your head</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/si.svg" />
+  <meta name="description" content="Omo is an experiment in building AI agents without black boxes." />
+  <link rel="alternate" type="application/rss+xml" title="J.A. Lamb" href="/rss.xml" />
+  <script>
+    (() => {
+      const storageKey = 'theme';
+      const storage = (() => {
+        try {
+          localStorage.setItem('__t', '1');
+          localStorage.removeItem('__t');
+          return localStorage;
+        } catch (err) {
+          try {
+            sessionStorage.setItem('__t', '1');
+            sessionStorage.removeItem('__t');
+            return sessionStorage;
+          } catch (innerErr) {
+            return null;
+          }
+        }
+      })();
+
+      const stored = storage ? storage.getItem(storageKey) : null;
+      if (stored === 'dark' || stored === 'light') {
+        document.documentElement.setAttribute('data-theme', stored);
+        return;
+      }
+      // Default to dark mode
+      document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
+  <link rel="stylesheet" href="/assets/styles.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <a class="site-title" href="/">J.A. Lamb</a>
+    <nav class="site-nav">
+      <a href="/">Home</a>
+      <a href="/about/">About</a>
+    </nav>
+    <button class="theme-toggle" type="button" id="theme-toggle" aria-pressed="false">Dark</button>
+  </header>
+
+  <main class="site-main">
+    <section class="post">
+  <header class="post-header">
+    <h1>The smallest agent is the one that fits in your head</h1>
+    <p class="post-meta">Jan 30, 2026</p>
+  </header>
+  <p>There is a certain kind of project that exists only because it refuses to be complicated.</p>
+<p>Omo is 500 lines of TypeScript. No framework abstractions. No elaborate state machines. Just a readline loop, a streaming API call, and a system prompt you can read in one sitting. It was extracted from a larger project called Moltbot—stripped down to the parts that actually matter.</p>
+<p>The architecture is embarrassingly simple: load some markdown files from a <code>workspace/</code> directory and inject them into the system prompt. The agent reads what you&#39;ve written about yourself and remembers it.</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> session = <span class="hljs-title function_">createAgentSession</span>(config);
+<span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> session.<span class="hljs-title function_">send</span>(prompt, <span class="hljs-function">(<span class="hljs-params">chunk</span>) =&gt;</span> {
+    process.<span class="hljs-property">stdout</span>.<span class="hljs-title function_">write</span>(chunk);
+});</code></pre><p>That is the whole API. Send a message, stream the response. History is just an array that grows.</p>
+<p>The interesting decision was the bootstrap files. Instead of a database or a config file, Omo reads plain markdown:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>SOUL.md</code></td>
+<td>Core persona—defines who your agent is</td>
+</tr>
+<tr>
+<td><code>USER.md</code></td>
+<td>Your preferences</td>
+</tr>
+<tr>
+<td><code>MEMORY.md</code></td>
+<td>Long-term memory</td>
+</tr>
+<tr>
+<td><code>AGENTS.md</code></td>
+<td>Agent behavior guidelines</td>
+</tr>
+<tr>
+<td><code>TOOLS.md</code></td>
+<td>Tool usage guidance</td>
+</tr>
+</tbody></table>
+<p>You edit these files in your text editor, and the next conversation reflects the change. No restart required. No migration script.</p>
+<p>Under the hood, it uses <code>@mariozechner/pi-coding-agent</code> for the core loop, SQLite with vector search for memory, and session transcripts stored as JSONL. But you do not need to know any of that to use it.</p>
+<pre><code class="hljs language-bash">npm install
+<span class="hljs-built_in">cp</span> .env.example .<span class="hljs-built_in">env</span>
+npm run chat</code></pre><p>Three commands. You are talking to your agent.</p>
+<p>This is the opposite of a product. It is a working theory about how simple an agent can be before it stops being useful.</p>
+<p>The answer, so far: surprisingly simple.</p>
+
+</section>
+
+  </main>
+
+  <footer class="site-footer">
+    <span>2026 J.A. Lamb</span>
+    <div class="site-footer-links">
+      <a href="mailto:jackeedraper@gmail.com">jackeedraper@gmail.com</a>
+      <a href="https://github.com/JohnnyLamb">GitHub</a>
+    </div>
+  </footer>
+  <script src="/assets/theme.js"></script>
+</body>
+
+</html>

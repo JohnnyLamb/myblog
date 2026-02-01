@@ -12,6 +12,13 @@
     <description>A small pipeline I can explain end to end.</description>
   </item>
   <item>
+    <title>The smallest agent is the one that fits in your head</title>
+    <link>https://jlamb.dev/posts/less-is-more/</link>
+    <guid isPermaLink="true">https://jlamb.dev/posts/less-is-more/</guid>
+    <pubDate>Sat, 31 Jan 2026 00:00:00 GMT</pubDate>
+    <description>Omo is an experiment in building AI agents without black boxes.</description>
+  </item>
+  <item>
     <title>Building a back-of-the-envelope estimator</title>
     <link>https://jlamb.dev/posts/resource-estimator/</link>
     <guid isPermaLink="true">https://jlamb.dev/posts/resource-estimator/</guid>
