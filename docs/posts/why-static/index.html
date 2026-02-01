@@ -6,6 +6,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Why static is still enough</title>
   <meta name="description" content="A minimal, readable publishing pipeline." />
+  <script>
+    (() => {
+      const storageKey = 'theme';
+      const storage = (() => {
+        try {
+          localStorage.setItem('__t', '1');
+          localStorage.removeItem('__t');
+          return localStorage;
+        } catch (err) {
+          try {
+            sessionStorage.setItem('__t', '1');
+            sessionStorage.removeItem('__t');
+            return sessionStorage;
+          } catch (innerErr) {
+            return null;
+          }
+        }
+      })();
+
+      const stored = storage ? storage.getItem(storageKey) : null;
+      if (stored === 'dark' || stored === 'light') {
+        document.documentElement.setAttribute('data-theme', stored);
+        return;
+      }
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
   <link rel="stylesheet" href="/assets/styles.css" />
 </head>
 
