@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>rolling-my-own-static-site-generator</title>
+  <meta name="description" content="A minimal, readable publishing pipeline." />
+  <script>
+    (() => {
+      const storageKey = 'theme';
+      const storage = (() => {
+        try {
+          localStorage.setItem('__t', '1');
+          localStorage.removeItem('__t');
+          return localStorage;
+        } catch (err) {
+          try {
+            sessionStorage.setItem('__t', '1');
+            sessionStorage.removeItem('__t');
+            return sessionStorage;
+          } catch (innerErr) {
+            return null;
+          }
+        }
+      })();
+
+      const stored = storage ? storage.getItem(storageKey) : null;
+      if (stored === 'dark' || stored === 'light') {
+        document.documentElement.setAttribute('data-theme', stored);
+        return;
+      }
+      // Default to dark mode
+      document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
+  <link rel="stylesheet" href="/assets/styles.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <a class="site-title" href="/">J.A. Lamb</a>
+    <nav class="site-nav">
+      <a href="/">Home</a>
+      <a href="/about/">About</a>
+    </nav>
+    <button class="theme-toggle" type="button" id="theme-toggle" aria-pressed="false">Dark</button>
+  </header>
+
+  <main class="site-main">
+    <hr>
+<p>title: Rolling my own static site generator</p>
+<p>date: 2026-02-01</p>
+<p>layout: post</p>
+<p>summary: A small, explicit pipeline that I can understand end‑to‑end.</p>
+<hr>
+<p>I didn’t want a website product. I wanted a publishing pipeline I could understand in one sitting.</p>
+<p>The appeal wasn’t novelty. It was clarity: every step from Markdown to HTML is visible, and every file exists for a reason. There’s no plugin ecosystem to manage, no theme layer to</p>
+<p>decode, and no “magic” I can’t explain later.</p>
+<h2>The shape of the system</h2>
+<p>The generator is deliberately small:</p>
+<ul>
+<li><p>Load Markdown from <code>src/</code></p>
+</li>
+<li><p>Parse frontmatter</p>
+</li>
+<li><p>Convert Markdown → HTML</p>
+</li>
+<li><p>Wrap with layouts</p>
+</li>
+<li><p>Write clean URLs to <code>docs/</code></p>
+</li>
+</ul>
+<p>That’s the whole pipeline. When it breaks, it breaks in one of five obvious places.</p>
+<h2>Pipeline diagram</h2>
+<p>src/posts/*.md</p>
+<p>|</p>
+<p>v</p>
+<p>[frontmatter]</p>
+<p>|</p>
+<p>v</p>
+<p>[markdown -&gt; html]</p>
+<p>|</p>
+<p>v</p>
+<p>[layout wrap]</p>
+<p>|</p>
+<p>v</p>
+<p>docs/posts/<slug>/index.html</p>
+<h2>Tradeoffs</h2>
+<p>I’m choosing simplicity, and that means giving up a few conveniences:</p>
+<ul>
+<li><p>No plugin marketplace</p>
+</li>
+<li><p>No “just add a theme” shortcuts</p>
+</li>
+<li><p>No automatic tag pages unless I build them</p>
+</li>
+<li><p>No CMS integration out of the box</p>
+</li>
+</ul>
+<p>I’m fine with that. The system exists to serve the writing, not the other way around.</p>
+<h2>Why it matters</h2>
+<p>Owning the publishing stack changes how you write. It removes friction, and it makes the site feel like a tool rather than a product. The code is infrastructure—boring and reliable</p>
+<p>—and the writing is the only thing that should ever feel alive.</p>
+<hr>
+<p>If you want to follow this path, start by making the smallest thing that works. Then stop.</p>
+
+  </main>
+
+  <footer class="site-footer">
+    <span>2026 J.A. Lamb</span>
+  </footer>
+  <script src="/assets/theme.js"></script>
+</body>
+
+</html>
