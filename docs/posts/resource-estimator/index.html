@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Building a back-of-the-envelope estimator</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/si.svg" />
+  <meta name="description" content="Sometimes copying what works is the right move." />
+  <link rel="alternate" type="application/rss+xml" title="J.A. Lamb" href="/rss.xml" />
+  <script>
+    (() => {
+      const storageKey = 'theme';
+      const storage = (() => {
+        try {
+          localStorage.setItem('__t', '1');
+          localStorage.removeItem('__t');
+          return localStorage;
+        } catch (err) {
+          try {
+            sessionStorage.setItem('__t', '1');
+            sessionStorage.removeItem('__t');
+            return sessionStorage;
+          } catch (innerErr) {
+            return null;
+          }
+        }
+      })();
+
+      const stored = storage ? storage.getItem(storageKey) : null;
+      if (stored === 'dark' || stored === 'light') {
+        document.documentElement.setAttribute('data-theme', stored);
+        return;
+      }
+      // Default to dark mode
+      document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
+  <link rel="stylesheet" href="/assets/styles.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <a class="site-title" href="/">J.A. Lamb</a>
+    <nav class="site-nav">
+      <a href="/">Home</a>
+      <a href="/about/">About</a>
+    </nav>
+    <button class="theme-toggle" type="button" id="theme-toggle" aria-pressed="false">Dark</button>
+  </header>
+
+  <main class="site-main">
+    <section class="post">
+  <header class="post-header">
+    <h1>Building a back-of-the-envelope estimator</h1>
+    <p class="post-meta">Jan 30, 2026</p>
+  </header>
+  <p>I needed a resource estimator for system design calculations. Instead of inventing something, I studied what already worked.</p>
+<p>System Design School has a clean tool for this. Two columns: educational content on the left, calculator on the right. Reference tables at the bottom. No magic, just useful.</p>
+<p>The implementation took three files:</p>
+<pre><code>src/lib/estimator/calculations.ts   # Pure math
+src/components/estimator/           # React component
+src/app/tools/estimator/            # Route + layout
+</code></pre>
+<p>The calculations file exports pure functions. No state, no side effects. Easy to test, easy to trust.</p>
+<pre><code class="language-typescript">export function calculateEstimates(inputs: EstimatorInputs): EstimatorOutputs {
+    const secondsPerDay = inputs.precisionMode ? 86_400 : 100_000
+    const readsPerSecond = (inputs.dau * inputs.readsPerUser) / secondsPerDay
+    // ...
+}
+</code></pre>
+<p>The component handles inputs and renders outputs. The reference tables for image sizes, video bitrates, and storage latency are just static data. No API calls, no loading states.</p>
+<p>The hardest part was the layout. I wanted the tool to live at <code>/tools/estimator</code> but still show the same sidebar as the dashboard. That meant duplicating the layout logic, which felt wrong until I realized: consistency for the user matters more than DRY for the developer.</p>
+<p>The whole thing works offline. You can reason about it by reading the code. That is the feature.</p>
+
+</section>
+
+  </main>
+
+  <footer class="site-footer">
+    <span>2026 J.A. Lamb</span>
+    <div class="site-footer-links">
+      <a href="mailto:jackeedraper@gmail.com">jackeedraper@gmail.com</a>
+      <a href="https://github.com/JohnnyLamb">GitHub</a>
+    </div>
+  </footer>
+  <script src="/assets/theme.js"></script>
+</body>
+
+</html>

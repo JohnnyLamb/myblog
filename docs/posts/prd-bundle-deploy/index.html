@@ -4,9 +4,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Home</title>
+  <title>Deploying PRD bundles to GitHub</title>
   <link rel="icon" type="image/svg+xml" href="/assets/si.svg" />
-  <meta name="description" content="A minimal, readable publishing pipeline." />
+  <meta name="description" content="Requirements become code through a pipeline you can trace." />
   <link rel="alternate" type="application/rss+xml" title="J.A. Lamb" href="/rss.xml" />
   <script>
     (() => {
@@ -50,26 +50,24 @@
   </header>
 
   <main class="site-main">
-    <div class="hero-mark">
-  <img src="/assets/si.svg" alt="思" />
-</div>
+    <section class="post">
+  <header class="post-header">
+    <h1>Deploying PRD bundles to GitHub</h1>
+    <p class="post-meta">Jan 24, 2026</p>
+  </header>
+  <p>A PRD bundle is a package. It contains the product requirements, the technical context, and the acceptance criteria. Everything the agent needs to implement a feature.</p>
+<p>When a PRD gets approved, it triggers deployment. The bundle gets serialized to JSON and committed to the target repository. The agent picks it up from there.</p>
+<p>The flow is intentionally simple:</p>
+<ol>
+<li>Human writes PRD in the UI</li>
+<li>Human approves the PRD</li>
+<li>System bundles PRD + context + criteria</li>
+<li>Bundle deploys to GitHub as a commit</li>
+<li>Agent reads bundle and implements</li>
+</ol>
+<p>Each step is visible. You can inspect the bundle before the agent touches it. You can see exactly what context it received.</p>
+<p>This traceability is the feature. When something goes wrong, you can ask: was the PRD unclear, or did the agent misinterpret it? The bundle is the evidence.</p>
 
-<!-- <section class="hero">
-  <h1>Writing, plainly.</h1>
-  <p class="lead">Small tools, clear thought, no surprises.</p>
-</section> -->
-
-<section class="posts">
-  <h2>Thoughts</h2>
-  <ol class="post-list">
-    <li><a href="/posts/rolling-my-own-static-site-generator/">Rolling my own static site generator</a> <time datetime="2026-02-01">Jan 31, 2026</time></li>
-<li><a href="/posts/resource-estimator/">Building a back-of-the-envelope estimator</a> <time datetime="2026-01-31">Jan 30, 2026</time></li>
-<li><a href="/posts/gsd-agent-integration/">Integrating GSD into the agent API layer</a> <time datetime="2026-01-30">Jan 29, 2026</time></li>
-<li><a href="/posts/agent-github-push/">The agent that pushes to GitHub</a> <time datetime="2026-01-28">Jan 27, 2026</time></li>
-<li><a href="/posts/prd-bundle-deploy/">Deploying PRD bundles to GitHub</a> <time datetime="2026-01-25">Jan 24, 2026</time></li>
-<li><a href="/posts/dream-machine-begins/">Dream Machine begins</a> <time datetime="2026-01-20">Jan 19, 2026</time></li>
-<li><a href="/posts/why-static/">Why static is still enough</a> <time datetime="2026-01-15">Jan 14, 2026</time></li>
-  </ol>
 </section>
 
   </main>

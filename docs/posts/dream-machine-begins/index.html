@@ -4,9 +4,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Home</title>
+  <title>Dream Machine begins</title>
   <link rel="icon" type="image/svg+xml" href="/assets/si.svg" />
-  <meta name="description" content="A minimal, readable publishing pipeline." />
+  <meta name="description" content="Building the infrastructure for AI-assisted development." />
   <link rel="alternate" type="application/rss+xml" title="J.A. Lamb" href="/rss.xml" />
   <script>
     (() => {
@@ -50,26 +50,18 @@
   </header>
 
   <main class="site-main">
-    <div class="hero-mark">
-  <img src="/assets/si.svg" alt="思" />
-</div>
+    <section class="post">
+  <header class="post-header">
+    <h1>Dream Machine begins</h1>
+    <p class="post-meta">Jan 19, 2026</p>
+  </header>
+  <p>Dream Machine started as a question: what if you could describe what you want and have an agent build it?</p>
+<p>Not a chatbot that suggests code. Not an autocomplete that guesses your next line. A system that takes requirements, reasons about them, and produces working software.</p>
+<p>The initial commit was infrastructure. Next.js for the UI. Prisma for the database. Docker for sandboxing. GitHub Apps for authentication.</p>
+<p>Each choice was about control. Next.js because it runs anywhere. Prisma because migrations are explicit. Docker because agents need isolation. GitHub Apps because installation-level access beats personal tokens.</p>
+<p>Phase 4 was making the pieces talk to each other. The UI creates PRDs. The backend packages them. The sandbox runs agents. GitHub receives the output.</p>
+<p>The dream is simple: describe the machine you want, then watch it get built. The infrastructure is what makes that possible.</p>
 
-<!-- <section class="hero">
-  <h1>Writing, plainly.</h1>
-  <p class="lead">Small tools, clear thought, no surprises.</p>
-</section> -->
-
-<section class="posts">
-  <h2>Thoughts</h2>
-  <ol class="post-list">
-    <li><a href="/posts/rolling-my-own-static-site-generator/">Rolling my own static site generator</a> <time datetime="2026-02-01">Jan 31, 2026</time></li>
-<li><a href="/posts/resource-estimator/">Building a back-of-the-envelope estimator</a> <time datetime="2026-01-31">Jan 30, 2026</time></li>
-<li><a href="/posts/gsd-agent-integration/">Integrating GSD into the agent API layer</a> <time datetime="2026-01-30">Jan 29, 2026</time></li>
-<li><a href="/posts/agent-github-push/">The agent that pushes to GitHub</a> <time datetime="2026-01-28">Jan 27, 2026</time></li>
-<li><a href="/posts/prd-bundle-deploy/">Deploying PRD bundles to GitHub</a> <time datetime="2026-01-25">Jan 24, 2026</time></li>
-<li><a href="/posts/dream-machine-begins/">Dream Machine begins</a> <time datetime="2026-01-20">Jan 19, 2026</time></li>
-<li><a href="/posts/why-static/">Why static is still enough</a> <time datetime="2026-01-15">Jan 14, 2026</time></li>
-  </ol>
 </section>
 
   </main>

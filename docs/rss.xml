@@ -12,6 +12,41 @@
     <description>A small pipeline I can explain end to end.</description>
   </item>
   <item>
+    <title>Building a back-of-the-envelope estimator</title>
+    <link>https://jlamb.dev/posts/resource-estimator/</link>
+    <guid isPermaLink="true">https://jlamb.dev/posts/resource-estimator/</guid>
+    <pubDate>Sat, 31 Jan 2026 00:00:00 GMT</pubDate>
+    <description>Sometimes copying what works is the right move.</description>
+  </item>
+  <item>
+    <title>Integrating GSD into the agent API layer</title>
+    <link>https://jlamb.dev/posts/gsd-agent-integration/</link>
+    <guid isPermaLink="true">https://jlamb.dev/posts/gsd-agent-integration/</guid>
+    <pubDate>Fri, 30 Jan 2026 00:00:00 GMT</pubDate>
+    <description>The protocol that makes agents finish what they start.</description>
+  </item>
+  <item>
+    <title>The agent that pushes to GitHub</title>
+    <link>https://jlamb.dev/posts/agent-github-push/</link>
+    <guid isPermaLink="true">https://jlamb.dev/posts/agent-github-push/</guid>
+    <pubDate>Wed, 28 Jan 2026 00:00:00 GMT</pubDate>
+    <description>Code generation is easy. Deployment is the test.</description>
+  </item>
+  <item>
+    <title>Deploying PRD bundles to GitHub</title>
+    <link>https://jlamb.dev/posts/prd-bundle-deploy/</link>
+    <guid isPermaLink="true">https://jlamb.dev/posts/prd-bundle-deploy/</guid>
+    <pubDate>Sun, 25 Jan 2026 00:00:00 GMT</pubDate>
+    <description>Requirements become code through a pipeline you can trace.</description>
+  </item>
+  <item>
+    <title>Dream Machine begins</title>
+    <link>https://jlamb.dev/posts/dream-machine-begins/</link>
+    <guid isPermaLink="true">https://jlamb.dev/posts/dream-machine-begins/</guid>
+    <pubDate>Tue, 20 Jan 2026 00:00:00 GMT</pubDate>
+    <description>Building the infrastructure for AI-assisted development.</description>
+  </item>
+  <item>
     <title>Why static is still enough</title>
     <link>https://jlamb.dev/posts/why-static/</link>
     <guid isPermaLink="true">https://jlamb.dev/posts/why-static/</guid>
