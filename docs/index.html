@@ -30,9 +30,8 @@
         document.documentElement.setAttribute('data-theme', stored);
         return;
       }
-      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.documentElement.setAttribute('data-theme', 'dark');
-      }
+      // Default to dark mode
+      document.documentElement.setAttribute('data-theme', 'dark');
     })();
   </script>
   <link rel="stylesheet" href="/assets/styles.css" />
