@@ -30,16 +30,16 @@
   --link-color: #65a0ff;
   --link-hover-color: #8ab4ff;
   --border-color: #454545;
-  --code-inline-bg: rgba(255, 255, 255, 0.08);
-  --code-inline-text: #e6edf3;
-  --hljs-bg: #0f1115;
-  --hljs-text: #e6edf3;
-  --hljs-comment: #8b949e;
-  --hljs-keyword: #ff7b72;
-  --hljs-string: #a5d6ff;
-  --hljs-number: #79c0ff;
-  --hljs-title: #d2a8ff;
-  --hljs-built_in: #ffa657;
+  --code-inline-bg: #3a3f4b;
+  --code-inline-text: #abb2bf;
+  --hljs-bg: #282c34;
+  --hljs-text: #abb2bf;
+  --hljs-comment: #5c6370;
+  --hljs-keyword: #c678dd;
+  --hljs-string: #98c379;
+  --hljs-number: #d19a66;
+  --hljs-title: #61afef;
+  --hljs-built_in: #56b6c2;
 }
 
 * {
@@ -122,6 +122,10 @@ pre code {
   font-family: var(--font-mono);
   font-size: 0.95rem;
   line-height: 1.5;
+  background: transparent;
+  border: none;
+  padding: 0;
+  white-space: pre;
 }
 
 code {
@@ -137,6 +141,7 @@ code {
 pre code.hljs {
   background: transparent;
   padding: 0;
+  border: none;
 }
 
 .hljs {
