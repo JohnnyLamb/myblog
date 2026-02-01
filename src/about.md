@@ -6,4 +6,4 @@ This is a deliberately small publishing system. It exists to serve the writing, 
 
 - Build: Markdown to HTML
 - Layouts: simple templates with placeholders
-- Output: clean URLs in `html/`
+- Output: clean URLs in `docs/`

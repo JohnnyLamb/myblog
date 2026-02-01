@@ -13,7 +13,7 @@ src/
   assets/         Static files copied as-is
   index.html      Home page
   about.md        Example page
-html/             Build output
+docs/             Build output (GitHub Pages)
 build.js          Generator
 ```
 
@@ -45,4 +45,4 @@ permalink: /custom-path/
 
 ## Notes
 
-Use `--clean` when you delete source files to avoid stale output in `html/`.
+Use `--clean` when you delete source files to avoid stale output in `docs/`.

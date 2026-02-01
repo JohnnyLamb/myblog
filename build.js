@@ -7,13 +7,19 @@ const matter = require('gray-matter');
 const { marked } = require('marked');
 
 const DEFAULT_IN = 'src';
-const DEFAULT_OUT = 'html';
+const DEFAULT_OUT = 'docs';
 const DEFAULT_PORT = 8080;
 const INCLUDE_DIR = '_includes';
 const LAYOUT_DIR = '_layouts';
 
 marked.setOptions({ mangle: false, headerIds: false });
 
+/**
+ * Parses command-line arguments and returns configuration options.
+ * Supports: --in (source dir), --out (output dir), --clean, --watch, --serve, --port
+ * @param {string[]} argv - The process.argv array
+ * @returns {object} Configuration object with inDir, outDir, clean, watch, serve, port
+ */
 function parseArgs(argv) {
   const args = { inDir: DEFAULT_IN, outDir: DEFAULT_OUT, clean: false, watch: false, serve: false, port: DEFAULT_PORT };
   for (let i = 2; i < argv.length; i += 1) {
@@ -35,6 +41,11 @@ function parseArgs(argv) {
   return args;
 }
 
+/**
+ * Recursively walks a directory and returns all file paths.
+ * @param {string} dir - The directory to walk
+ * @returns {string[]} Array of absolute file paths
+ */
 function walk(dir) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
   const files = [];
@@ -49,15 +60,31 @@ function walk(dir) {
   return files;
 }
 
+/**
+ * Creates a directory and all parent directories if they don't exist.
+ * @param {string} dirPath - The directory path to create
+ */
 function ensureDir(dirPath) {
   fs.mkdirSync(dirPath, { recursive: true });
 }
 
+/**
+ * Checks if a file/directory should be ignored (paths starting with underscore).
+ * Used to exclude _layouts, _includes, _data from output.
+ * @param {string} relPath - Relative path to check
+ * @returns {boolean} True if the path should be ignored
+ */
 function isIgnored(relPath) {
   const parts = relPath.split(path.sep);
   return parts.some((part) => part.startsWith('_'));
 }
 
+/**
+ * Gets a nested value from an object using dot notation (e.g., "site.title").
+ * @param {object} obj - The object to query
+ * @param {string} key - Dot-separated key path
+ * @returns {*} The value, or empty string if not found
+ */
 function getValue(obj, key) {
   const parts = key.split('.');
   let current = obj;
@@ -68,6 +95,14 @@ function getValue(obj, key) {
   return current == null ? '' : current;
 }
 
+/**
+ * Renders a template string by replacing {{variables}} and {{> partials}}.
+ * Handles include directives ({{> filename}}) and variable interpolation.
+ * @param {string} input - The template string
+ * @param {object} context - Variables available for interpolation
+ * @param {object} opts - Options: srcDir, includeCache, depth (recursion limit)
+ * @returns {string} The rendered template
+ */
 function renderTemplate(input, context, opts = {}) {
   const { srcDir, includeCache, depth = 0 } = opts;
   if (depth > 10) return input;
@@ -90,12 +125,24 @@ function renderTemplate(input, context, opts = {}) {
   return output;
 }
 
+/**
+ * Resolves a layout name to its file path.
+ * @param {string} srcDir - The source directory
+ * @param {string} layoutName - Layout name (e.g., "base" or "post")
+ * @returns {string|null} Full path to layout file, or null if none
+ */
 function resolveLayout(srcDir, layoutName) {
   if (!layoutName || layoutName === 'none') return null;
   if (layoutName.endsWith('.html')) return path.join(srcDir, layoutName);
   return path.join(srcDir, LAYOUT_DIR, `${layoutName}.html`);
 }
 
+/**
+ * Recursively applies layout templates to content.
+ * Layouts can chain (a layout can specify its own parent layout).
+ * @param {object} params - Contains srcDir, layoutName, content, context, includeCache, depth
+ * @returns {string} The fully laid-out HTML
+ */
 function applyLayouts({ srcDir, layoutName, content, context, includeCache, depth = 0 }) {
   if (!layoutName || layoutName === 'none' || depth > 8) return content;
   const layoutPath = resolveLayout(srcDir, layoutName);
@@ -119,6 +166,11 @@ function applyLayouts({ srcDir, layoutName, content, context, includeCache, dept
   });
 }
 
+/**
+ * Parses a date value into a Date object.
+ * @param {string|Date} value - Date string or Date object
+ * @returns {Date|null} Parsed Date, or null if invalid
+ */
 function parseDate(value) {
   if (!value) return null;
   const date = new Date(value);
@@ -126,6 +178,11 @@ function parseDate(value) {
   return date;
 }
 
+/**
+ * Formats a Date object as a human-readable string (e.g., "Jan 15, 2026").
+ * @param {Date} date - The date to format
+ * @returns {string} Formatted date string
+ */
 function formatDate(date) {
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
@@ -134,11 +191,22 @@ function formatDate(date) {
   }).format(date);
 }
 
+/**
+ * Extracts a date from a filename (e.g., "2026-01-15-my-post" → "2026-01-15").
+ * @param {string} baseName - The filename without extension
+ * @returns {string|null} Date string if found, otherwise null
+ */
 function inferDateFromFilename(baseName) {
   const match = baseName.match(/^(\d{4}-\d{2}(?:-\d{2})?)-/);
   return match ? match[1] : null;
 }
 
+/**
+ * Computes the output file path for a source file.
+ * Respects custom permalinks, handles posts specially, converts .md to .html.
+ * @param {object} params - Contains srcDir, outDir, relPath, ext, data, isPost, slug
+ * @returns {string} The output file path
+ */
 function computeOutputPath({ srcDir, outDir, relPath, ext, data, isPost, slug }) {
   if (data.permalink) {
     const permalink = data.permalink.replace(/^\//, '');
@@ -163,6 +231,12 @@ function computeOutputPath({ srcDir, outDir, relPath, ext, data, isPost, slug })
   return path.join(outDir, dir, baseName, 'index.html');
 }
 
+/**
+ * Computes the public URL for a file based on its output path.
+ * @param {string} outDir - The output directory
+ * @param {string} outPath - The full output file path
+ * @returns {string} The URL path (e.g., "/posts/my-post/")
+ */
 function computeUrl(outDir, outPath) {
   const rel = path.relative(outDir, outPath).replace(/\\/g, '/');
   if (rel === 'index.html') return '/';
@@ -170,6 +244,15 @@ function computeUrl(outDir, outPath) {
   return `/${rel}`;
 }
 
+/**
+ * Main build function. Processes all source files and generates the static site.
+ * - Reads site config from _data/site.json
+ * - Processes .md and .html files with frontmatter
+ * - Copies static assets (images, CSS, etc.)
+ * - Applies layouts and renders templates
+ * - Generates post listings
+ * @param {object} options - Contains inDir, outDir, clean
+ */
 function buildSite({ inDir, outDir, clean }) {
   const srcDir = path.resolve(inDir);
   const targetDir = path.resolve(outDir);
@@ -311,6 +394,11 @@ function buildSite({ inDir, outDir, clean }) {
   }
 }
 
+/**
+ * Starts a local HTTP server to serve the built site.
+ * @param {string} outDir - The directory to serve
+ * @param {number} port - The port to listen on
+ */
 function startServer(outDir, port) {
   const base = path.resolve(outDir);
 
@@ -352,6 +440,11 @@ function startServer(outDir, port) {
   });
 }
 
+/**
+ * Watches the source directory for changes and rebuilds automatically.
+ * Uses debouncing to avoid rebuilding too frequently.
+ * @param {object} options - Build options (inDir, outDir, clean)
+ */
 function watchAndBuild(options) {
   let timer = null;
   const srcDir = path.resolve(options.inDir);
@@ -369,6 +462,10 @@ function watchAndBuild(options) {
   });
 }
 
+/**
+ * Entry point. Parses arguments, builds the site, and optionally
+ * starts the dev server and/or file watcher.
+ */
 function main() {
   const options = parseArgs(process.argv);
   try {
