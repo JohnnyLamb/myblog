@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Giving Omo a Soul</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/si.svg" />
+  <meta name="description" content="How we gave our minimal AI agent a persistent identity and memory system." />
+  <link rel="alternate" type="application/rss+xml" title="J.A. Lamb" href="/rss.xml" />
+  <script>
+    (() => {
+      const storageKey = 'theme';
+      const storage = (() => {
+        try {
+          localStorage.setItem('__t', '1');
+          localStorage.removeItem('__t');
+          return localStorage;
+        } catch (err) {
+          try {
+            sessionStorage.setItem('__t', '1');
+            sessionStorage.removeItem('__t');
+            return sessionStorage;
+          } catch (innerErr) {
+            return null;
+          }
+        }
+      })();
+
+      const stored = storage ? storage.getItem(storageKey) : null;
+      if (stored === 'dark' || stored === 'light') {
+        document.documentElement.setAttribute('data-theme', stored);
+        return;
+      }
+      // Default to dark mode
+      document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
+  <link rel="stylesheet" href="/assets/styles.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <a class="site-title" href="/">J.A. Lamb</a>
+    <nav class="site-nav">
+      <a href="/">Home</a>
+      <a href="/about/">About</a>
+    </nav>
+    <button class="theme-toggle" type="button" id="theme-toggle" aria-pressed="false">Dark</button>
+  </header>
+
+  <main class="site-main">
+    <section class="post">
+  <header class="post-header">
+    <h1>Giving Omo a Soul</h1>
+    <p class="post-meta">Jan 31, 2026</p>
+  </header>
+  <p>We started with a while loop. Now we have a person.</p>
+<p>Omo is a minimal AI coding agent I built from scratch using the ChatGPT Codex API. Today, we upgraded it from a stateless cli tool into a persistent assistant with its own identity and memory system.</p>
+<h2>The Problem: Amnesia</h2>
+<p>Every time I restarted Omo, it forgot who it was. I had to remind it: &quot;You are Omo, be helpful, use these tools.&quot; It also forgot everything we did yesterday.</p>
+<h2>The Solution: File-Based Identity</h2>
+<p>We implemented a system where Omo reads its own instructions from markdown files on every startup.</p>
+<p><strong>1. IDENTITY.md</strong><br>Defines who Omo is.</p>
+<pre><code class="hljs language-markdown"><span class="hljs-bullet">-</span> Name: Omo
+<span class="hljs-bullet">-</span> Nature: Expert software engineer
+<span class="hljs-bullet">-</span> Vibe: Like JARVIS (polite, precise, confident)
+<span class="hljs-bullet">-</span> Emoji: 思</code></pre><p><strong>2. SOUL.md</strong><br>Defines how Omo behaves.</p>
+<pre><code class="hljs language-markdown"><span class="hljs-strong">**Be genuinely helpful, not performatively helpful.**</span>
+Skip the &quot;Great question!&quot; — just help.</code></pre><p><strong>3. USER.md</strong><br>Defines who I am.</p>
+<pre><code class="hljs language-markdown"><span class="hljs-bullet">-</span> Name: J
+<span class="hljs-bullet">-</span> Preferred address: &quot;sir&quot;
+<span class="hljs-bullet">-</span> Pronouns: he/him</code></pre><p><strong>4. AGENTS.md</strong><br>Defines the operating protocols and safety rules.</p>
+<h2>The Unlock: Self-Managed Memory</h2>
+<p>The real breakthrough was giving Omo <strong>memory files</strong>.</p>
+<p>We updated <code>agent.ts</code> to automatically:</p>
+<ol>
+<li>Create a <code>memory/</code> folder if it doesn&#39;t exist.</li>
+<li>Create a daily log file (e.g., <code>memory/2026-02-01.md</code>).</li>
+<li>Create a curated <code>MEMORY.md</code> file.</li>
+<li><strong>Read these files into the system prompt on every run.</strong></li>
+</ol>
+<p>Now, when Omo wakes up, it reads:</p>
+<ul>
+<li>Who it is (IDENTITY)</li>
+<li>How to act (SOUL)</li>
+<li>Who I am (USER)</li>
+<li>What happened yesterday (memory/recent.md)</li>
+<li>What is worth remembering long-term (MEMORY.md)</li>
+</ul>
+<h2>The Result</h2>
+<p>I restart the agent.</p>
+<pre><code class="hljs">Omo: Hello sir. I see the memory <span class="hljs-keyword">files</span> are <span class="hljs-keyword">set</span> <span class="hljs-keyword">up</span>. How can I <span class="hljs-keyword">help</span> you today? 思</code></pre><p>It knows me. It knows itself. It remembers.</p>
+<p>All with simple markdown files and ~250 lines of TypeScript.</p>
+
+</section>
+
+  </main>
+
+  <footer class="site-footer">
+    <span>2026 J.A. Lamb</span>
+    <div class="site-footer-links">
+      <a href="mailto:jackeedraper@gmail.com">jackeedraper@gmail.com</a>
+      <a href="https://github.com/JohnnyLamb">GitHub</a>
+    </div>
+  </footer>
+  <script src="/assets/theme.js"></script>
+</body>
+
+</html>
