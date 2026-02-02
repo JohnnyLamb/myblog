@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Building an AI Agent from Scratch</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/si.svg" />
+  <meta name="description" content="What I learned discovering how ChatGPT subscriptions power coding agents." />
+  <link rel="alternate" type="application/rss+xml" title="J.A. Lamb" href="/rss.xml" />
+  <script>
+    (() => {
+      const storageKey = 'theme';
+      const storage = (() => {
+        try {
+          localStorage.setItem('__t', '1');
+          localStorage.removeItem('__t');
+          return localStorage;
+        } catch (err) {
+          try {
+            sessionStorage.setItem('__t', '1');
+            sessionStorage.removeItem('__t');
+            return sessionStorage;
+          } catch (innerErr) {
+            return null;
+          }
+        }
+      })();
+
+      const stored = storage ? storage.getItem(storageKey) : null;
+      if (stored === 'dark' || stored === 'light') {
+        document.documentElement.setAttribute('data-theme', stored);
+        return;
+      }
+      // Default to dark mode
+      document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
+  <link rel="stylesheet" href="/assets/styles.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <a class="site-title" href="/">J.A. Lamb</a>
+    <nav class="site-nav">
+      <a href="/">Home</a>
+      <a href="/about/">About</a>
+    </nav>
+    <button class="theme-toggle" type="button" id="theme-toggle" aria-pressed="false">Dark</button>
+  </header>
+
+  <main class="site-main">
+    <section class="post">
+  <header class="post-header">
+    <h1>Building an AI Agent from Scratch</h1>
+    <p class="post-meta">Jan 31, 2026</p>
+  </header>
+  <p>I wanted to understand how AI coding agents work. Not use one—<em>build</em> one.</p>
+<p>The result is OMO-agent: a minimal coding agent in ~200 lines of TypeScript that reads files, writes files, edits files, and runs shell commands. It uses my ChatGPT Plus subscription, not an API key.</p>
+<h2>The Discovery</h2>
+<p>When I first tried connecting to OpenAI&#39;s API with my subscription&#39;s OAuth token, I got rate limit errors immediately. Something was wrong.</p>
+<p>Digging through Pi-Agent&#39;s source code, I found the secret: ChatGPT subscriptions don&#39;t use <code>api.openai.com</code>. They use a completely different endpoint:</p>
+<pre><code class="hljs">https:<span class="hljs-regexp">//</span>chatgpt.com<span class="hljs-regexp">/backend-api/</span>codex/responses</code></pre><p>This is the &quot;Codex Responses&quot; API—an experimental protocol that powers tools like Pi-Agent and OpenAI&#39;s Codex CLI. It requires special headers, JWT extraction, and a different message format than the standard Chat Completions API.</p>
+<h2>The Architecture</h2>
+<pre><code class="hljs">OMO-agent/
+├── src/
+│   ├── <span class="hljs-built_in">index</span>.<span class="hljs-keyword">ts</span>      ← CLI + OAuth reader
+│   ├── agent.<span class="hljs-keyword">ts</span>      ← Codex API + tool loop
+│   ├── types.<span class="hljs-keyword">ts</span>      ← Tool interface
+│   └── tools/
+│       ├── <span class="hljs-keyword">read</span>.<span class="hljs-keyword">ts</span>   ├── <span class="hljs-keyword">write</span>.<span class="hljs-keyword">ts</span>
+│       ├── <span class="hljs-keyword">edit</span>.<span class="hljs-keyword">ts</span>   └── bash.<span class="hljs-keyword">ts</span></code></pre><p>The core loop is simple:</p>
+<ol>
+<li>Send user message to API with tools defined</li>
+<li>Stream the response</li>
+<li>If the model calls a tool, execute it</li>
+<li>Feed the result back to the API</li>
+<li>Repeat until the model stops</li>
+</ol>
+<h2>What Made It Work</h2>
+<p>Three key insights from Pi-Agent:</p>
+<p><strong>1. The endpoint matters.</strong> ChatGPT subscriptions route through <code>chatgpt.com</code>, not <code>api.openai.com</code>. Same company, different systems.</p>
+<p><strong>2. Extract the accountId from the JWT.</strong> The access token contains your ChatGPT account ID buried in its payload. You need to decode it and send it as a header.</p>
+<p><strong>3. Message format differs.</strong> User messages use <code>input_text</code>. Assistant messages use <code>output_text</code>. Mix them up and the API rejects your request.</p>
+<h2>The Result</h2>
+<pre><code class="hljs"><span class="hljs-number">$</span> npm run dev
+
+OMO Agent ready (Codex). <span class="hljs-keyword">Type</span> a <span class="hljs-keyword">message</span>:
+
+You: Create a <span class="hljs-keyword">file</span> called test.md saying hello
+
+[Tool: <span class="hljs-keyword">write</span>]
+[Result: Wrote <span class="hljs-number">5</span> bytes <span class="hljs-keyword">to</span> test.md]
+
+Done.</code></pre><p>No API billing. Uses my existing ChatGPT Plus subscription. ~200 lines of code.</p>
+<h2>What I Learned</h2>
+<p>Building an agent from scratch taught me more than using one ever could. The magic isn&#39;t magic—it&#39;s a while loop that keeps calling the API until there are no more tool calls.</p>
+<p>The subscriptions we pay for every month can power our own tools if we know where to look. Pi-Agent showed me the door. Now I have keys of my own.</p>
+
+</section>
+
+  </main>
+
+  <footer class="site-footer">
+    <span>2026 J.A. Lamb</span>
+    <div class="site-footer-links">
+      <a href="mailto:jackeedraper@gmail.com">jackeedraper@gmail.com</a>
+      <a href="https://github.com/JohnnyLamb">GitHub</a>
+    </div>
+  </footer>
+  <script src="/assets/theme.js"></script>
+</body>
+
+</html>

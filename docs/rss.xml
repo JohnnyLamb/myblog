@@ -12,6 +12,13 @@
     <description>A small pipeline I can explain end to end.</description>
   </item>
   <item>
+    <title>Building an AI Agent from Scratch</title>
+    <link>https://jlamb.dev/posts/building-omo-agent/</link>
+    <guid isPermaLink="true">https://jlamb.dev/posts/building-omo-agent/</guid>
+    <pubDate>Sun, 01 Feb 2026 00:00:00 GMT</pubDate>
+    <description>What I learned discovering how ChatGPT subscriptions power coding agents.</description>
+  </item>
+  <item>
     <title>The smallest agent is the one that fits in your head</title>
     <link>https://jlamb.dev/posts/less-is-more/</link>
     <guid isPermaLink="true">https://jlamb.dev/posts/less-is-more/</guid>
