@@ -326,6 +326,16 @@ function buildSite({ inDir, outDir, clean }) {
   const basePrefix = site.baseUrl ? site.baseUrl.replace(/\/$/, '') : '';
   const siteUrl = site.url || (site.domain ? `https://${site.domain}` : '');
   const siteRoot = siteUrl ? `${siteUrl}${basePrefix}` : basePrefix;
+  const ideasPath = path.join(srcDir, '_data', 'ideas.json');
+  let ideas = [];
+  if (fs.existsSync(ideasPath)) {
+    try {
+      const ideasData = JSON.parse(fs.readFileSync(ideasPath, 'utf8'));
+      if (Array.isArray(ideasData)) ideas = ideasData;
+    } catch (err) {
+      console.error('Invalid _data/ideas.json; using empty list.');
+    }
+  }
 
   for (const file of files) {
     const relPath = path.relative(srcDir, file);
@@ -400,6 +410,18 @@ function buildSite({ inDir, outDir, clean }) {
     })
     .join('\n');
 
+  const ideasHtml = (ideas.length ? ideas : ['Add ideas in src/_data/ideas.json'])
+    .map((idea) => {
+      if (typeof idea === 'string') {
+        return `<li>${escapeXml(idea)}</li>`;
+      }
+      const title = idea && idea.title ? escapeXml(idea.title) : '';
+      const note = idea && idea.note ? ` <span class="idea-note">${escapeXml(idea.note)}</span>` : '';
+      const label = title || escapeXml(String(idea));
+      return `<li>${label}${note}</li>`;
+    })
+    .join('\n');
+
   for (const entry of entries) {
     const page = {
       ...entry.data,
@@ -421,6 +443,8 @@ function buildSite({ inDir, outDir, clean }) {
       dateHuman: page.dateHuman,
       posts,
       postsHtml,
+      ideas,
+      ideasHtml,
       year: new Date().getFullYear(),
     };
 
