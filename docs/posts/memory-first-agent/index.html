@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>A memory-first agent</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/si.svg" />
+  <meta name="description" content="Treating memory as infrastructure, not an afterthought." />
+  <link rel="alternate" type="application/rss+xml" title="J.A. Lamb" href="/rss.xml" />
+  <script>
+    (() => {
+      const storageKey = 'theme';
+      const storage = (() => {
+        try {
+          localStorage.setItem('__t', '1');
+          localStorage.removeItem('__t');
+          return localStorage;
+        } catch (err) {
+          try {
+            sessionStorage.setItem('__t', '1');
+            sessionStorage.removeItem('__t');
+            return sessionStorage;
+          } catch (innerErr) {
+            return null;
+          }
+        }
+      })();
+
+      const stored = storage ? storage.getItem(storageKey) : null;
+      if (stored === 'dark' || stored === 'light') {
+        document.documentElement.setAttribute('data-theme', stored);
+        return;
+      }
+      // Default to dark mode
+      document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
+  <link rel="stylesheet" href="/assets/styles.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <a class="site-title" href="/">J.A. Lamb</a>
+    <nav class="site-nav">
+      <a href="/">Home</a>
+      <a href="/about/">About</a>
+    </nav>
+    <button class="theme-toggle" type="button" id="theme-toggle" aria-pressed="false">Dark</button>
+  </header>
+
+  <main class="site-main">
+    <section class="post">
+  <header class="post-header">
+    <h1>A memory-first agent</h1>
+    <p class="post-meta">Feb 01, 2026</p>
+  </header>
+  <p>The more I work on Omo, the more I realize the assistant is only as good as its memory.
+Not in the sci‑fi sense—just the boring, concrete files that carry context across sessions.</p>
+<p>So I started making memory <em>infrastructure</em>, not an afterthought:</p>
+<ul>
+<li><strong>Daily logs</strong> (today + yesterday) created automatically</li>
+<li>A <strong>long‑term memory</strong> file that accumulates the distilled signal</li>
+<li>A <strong>system prompt loader</strong> that always pulls identity + recent memory</li>
+<li>A gentle reminder to surface open threads at session start</li>
+</ul>
+<p>The practical effect is subtle but powerful:</p>
+<ol>
+<li>Omo wakes up with context instead of guesswork.</li>
+<li>We can build continuity without “are you there?” friction.</li>
+<li>The workspace itself becomes the source of truth.</li>
+</ol>
+<p>This is not about perfect recall. It is about <strong>reliable continuity</strong>.</p>
+<p>I want the agent to behave like a great teammate: show up prepared, remember decisions, and keep promises. It turns out the path to that is not a model tweak—it is a folder of plain‑text files, consistently updated, and always loaded.</p>
+<p>Memory is just files. The discipline is the system around them.</p>
+
+</section>
+
+  </main>
+
+  <footer class="site-footer">
+    <span>2026 J.A. Lamb</span>
+    <div class="site-footer-links">
+      <a href="mailto:jackeedraper@gmail.com">jackeedraper@gmail.com</a>
+      <a href="https://github.com/JohnnyLamb">GitHub</a>
+    </div>
+  </footer>
+  <script src="/assets/theme.js"></script>
+</body>
+
+</html>

@@ -5,6 +5,13 @@
   <link>https://jlamb.dev</link>
   <description>A minimal, readable publishing pipeline.</description>
   <item>
+    <title>A memory-first agent</title>
+    <link>https://jlamb.dev/posts/memory-first-agent/</link>
+    <guid isPermaLink="true">https://jlamb.dev/posts/memory-first-agent/</guid>
+    <pubDate>Mon, 02 Feb 2026 00:00:00 GMT</pubDate>
+    <description>Treating memory as infrastructure, not an afterthought.</description>
+  </item>
+  <item>
     <title>Rolling my own static site generator</title>
     <link>https://jlamb.dev/posts/rolling-my-own-static-site-generator/</link>
     <guid isPermaLink="true">https://jlamb.dev/posts/rolling-my-own-static-site-generator/</guid>
