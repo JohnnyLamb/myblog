@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Building a web UI for Omo</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/si.svg" />
+  <meta name="description" content="Decoupling the brain from the mouth, and reaching Omo from anywhere." />
+  <link rel="alternate" type="application/rss+xml" title="J.A. Lamb" href="/rss.xml" />
+  <script>
+    (() => {
+      const storageKey = 'theme';
+      const storage = (() => {
+        try {
+          localStorage.setItem('__t', '1');
+          localStorage.removeItem('__t');
+          return localStorage;
+        } catch (err) {
+          try {
+            sessionStorage.setItem('__t', '1');
+            sessionStorage.removeItem('__t');
+            return sessionStorage;
+          } catch (innerErr) {
+            return null;
+          }
+        }
+      })();
+
+      const stored = storage ? storage.getItem(storageKey) : null;
+      if (stored === 'dark' || stored === 'light') {
+        document.documentElement.setAttribute('data-theme', stored);
+        return;
+      }
+      // Default to dark mode
+      document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
+  <link rel="stylesheet" href="/assets/styles.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <a class="site-title" href="/">J.A. Lamb</a>
+    <nav class="site-nav">
+      <a href="/">Home</a>
+      <a href="/about/">About</a>
+    </nav>
+    <button class="theme-toggle" type="button" id="theme-toggle" aria-pressed="false">Dark</button>
+  </header>
+
+  <main class="site-main">
+    <section class="post">
+  <header class="post-header">
+    <h1>Building a web UI for Omo</h1>
+    <p class="post-meta">Feb 02, 2026</p>
+  </header>
+  <p>Today I tackled a question that&#39;s been nagging me: <strong>How do I talk to Omo from my phone?</strong></p>
+<p>The CLI is great when I&#39;m at my desk, but I wanted the freedom to chat from any device. That meant building a web interface.</p>
+<h2>The refactor that made it possible</h2>
+<p>The first insight was that Omo&#39;s &quot;brain&quot; (the agent logic) was tangled up with its &quot;mouth&quot; (terminal output). <code>console.log</code> and <code>ora</code> spinners were sprinkled throughout. Before I could add a web UI, I needed to untangle them.</p>
+<p>The solution: <strong>events</strong>.</p>
+<p>Instead of printing directly, the agent now emits:</p>
+<ul>
+<li><code>thinking</code> — when it&#39;s processing</li>
+<li><code>token</code> — each chunk of streaming text</li>
+<li><code>tool_start</code> / <code>tool_end</code> — when tools run</li>
+<li><code>response_end</code> — when the turn is complete</li>
+</ul>
+<p>The CLI subscribes to these events and renders with chalk and ora. A web server can subscribe and stream SSE. Same brain, different mouths.</p>
+<h2>The web stack</h2>
+<p>I chose <strong>Next.js</strong> for the frontend because I have bigger plans for this app than just chat. The API routes handle OAuth and streaming. The UI is a simple dark-themed chat interface with real-time token streaming.</p>
+<p>The tricky part was OAuth. Omo uses OpenAI&#39;s auth flow, and the redirect URI was registered for <code>localhost:1455</code>. For now, the web app runs on that port to match. A small hack, but it works.</p>
+<h2>What&#39;s next</h2>
+<p>The web UI currently runs locally. To access it from anywhere, I have options:</p>
+<ul>
+<li><strong>Cloudflare Tunnel</strong> — free, exposes localhost to the internet</li>
+<li><strong>Cloud deployment</strong> — Vercel/Render, but then identity files need to move to a database</li>
+</ul>
+<p>For now, I&#39;m happy with the foundation. The agent is UI-agnostic. The CLI still works exactly as before. And I can chat with Omo from my browser.</p>
+<p>The best part? Omo still wakes up with its memory intact. Same identity files, same daily logs, same continuity—just a new way to reach it.</p>
+
+</section>
+
+  </main>
+
+  <footer class="site-footer">
+    <span>2026 J.A. Lamb</span>
+    <div class="site-footer-links">
+      <a href="mailto:jackeedraper@gmail.com">jackeedraper@gmail.com</a>
+      <a href="https://github.com/JohnnyLamb">GitHub</a>
+    </div>
+  </footer>
+  <script src="/assets/theme.js"></script>
+</body>
+
+</html>

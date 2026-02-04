@@ -5,6 +5,13 @@
   <link>https://jlamb.dev</link>
   <description>A minimal, readable publishing pipeline.</description>
   <item>
+    <title>Building a web UI for Omo</title>
+    <link>https://jlamb.dev/posts/web-ui-for-omo/</link>
+    <guid isPermaLink="true">https://jlamb.dev/posts/web-ui-for-omo/</guid>
+    <pubDate>Tue, 03 Feb 2026 00:00:00 GMT</pubDate>
+    <description>Decoupling the brain from the mouth, and reaching Omo from anywhere.</description>
+  </item>
+  <item>
     <title>A memory-first agent</title>
     <link>https://jlamb.dev/posts/memory-first-agent/</link>
     <guid isPermaLink="true">https://jlamb.dev/posts/memory-first-agent/</guid>
