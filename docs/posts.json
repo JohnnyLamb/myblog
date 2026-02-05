@@ -1,11 +1,21 @@
 {
-  "generatedAt": "2026-02-04T06:51:48.751Z",
+  "generatedAt": "2026-02-05T04:47:17.412Z",
   "site": {
     "title": "J.A. Lamb",
     "description": "A minimal, readable publishing pipeline.",
     "url": "https://jlamb.dev"
   },
   "posts": [
+    {
+      "title": "Automatic memory bootstrapping for Omo",
+      "date": "2026-02-04",
+      "summary": "Ensuring memory files exist and loading the latest non-empty log to preserve context across sessions.",
+      "url": "https://jlamb.dev/posts/memory-bootstrapping/",
+      "path": "/posts/memory-bootstrapping/",
+      "slug": "memory-bootstrapping",
+      "content_html": "<p>The goal was simple: <strong>continuity without friction</strong>. I didn’t want to babysit memory files or remember to load the right ones every session. So we taught Omo to handle it automatically.</p>\n<h2>The problem</h2>\n<p>Omo’s system prompt depends on a consistent set of memory files:</p>\n<ul>\n<li>daily logs in <code>memory/YYYY-MM-DD.md</code></li>\n<li>long‑term memory in <code>MEMORY.md</code></li>\n</ul>\n<p>When those files are missing (new workspace, fresh clone, new day), context breaks and continuity suffers.</p>\n<h2>The fix</h2>\n<p>We implemented automatic bootstrapping and smarter loading in <code>src/agent.ts</code>:</p>\n<ul>\n<li>Ensure <code>memory/</code> exists</li>\n<li>Create <strong>today</strong> and <strong>yesterday</strong> daily logs if missing</li>\n<li>Create <code>MEMORY.md</code> if missing</li>\n<li>Load the <strong>most recent non‑empty</strong> daily log into the system prompt</li>\n<li>Always include <code>MEMORY.md</code> for long‑term continuity</li>\n</ul>\n<p>The result: Omo wakes up with context every time, without manual setup.</p>\n<h2>Why “most recent non‑empty” matters</h2>\n<p>Daily logs can be empty templates. Loading the newest file by date isn’t enough. We instead sort by modification time and skip small template‑only files, ensuring we bring in real context.</p>\n<h2>Outcome</h2>\n<p>This change makes Omo feel <em>continuous</em>—even across cold starts—and removes a fragile, manual step from the workflow.</p>\n<p>If you want the exact logic, check <code>ensureMemoryFiles()</code> and <code>loadSystemPrompt()</code> in <code>src/agent.ts</code>.</p>\n",
+      "content_text": "The goal was simple: continuity without friction . I didn’t want to babysit memory files or remember to load the right ones every session. So we taught Omo to handle it automatically. The problem Omo’s system prompt depends on a consistent set of memory files: daily logs in memory/YYYY-MM-DD.md long‑term memory in MEMORY.md When those files are missing (new workspace, fresh clone, new day), context breaks and continuity suffers. The fix We implemented automatic bootstrapping and smarter loading in src/agent.ts : Ensure memory/ exists Create today and yesterday daily logs if missing Create MEMORY.md if missing Load the most recent non‑empty daily log into the system prompt Always include MEMORY.md for long‑term continuity The result: Omo wakes up with context every time, without manual setup. Why “most recent non‑empty” matters Daily logs can be empty templates. Loading the newest file by date isn’t enough. We instead sort by modification time and skip small template‑only files, ensuring we bring in real context. Outcome This change makes Omo feel continuous —even across cold starts—and removes a fragile, manual step from the workflow. If you want the exact logic, check ensureMemoryFiles() and loadSystemPrompt() in src/agent.ts ."
+    },
     {
       "title": "Building a web UI for Omo",
       "date": "2026-02-03",
