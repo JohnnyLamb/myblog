@@ -5,6 +5,13 @@
   <link>https://jlamb.dev</link>
   <description>A minimal, readable publishing pipeline.</description>
   <item>
+    <title>Carrying forward open threads</title>
+    <link>https://jlamb.dev/posts/carryover-open-threads/</link>
+    <guid isPermaLink="true">https://jlamb.dev/posts/carryover-open-threads/</guid>
+    <pubDate>Wed, 04 Feb 2026 00:00:00 GMT</pubDate>
+    <description>Automatically roll unfinished follow‑ups into today’s daily log so nothing gets lost.</description>
+  </item>
+  <item>
     <title>Automatic memory bootstrapping for Omo</title>
     <link>https://jlamb.dev/posts/memory-bootstrapping/</link>
     <guid isPermaLink="true">https://jlamb.dev/posts/memory-bootstrapping/</guid>

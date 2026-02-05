@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Carrying forward open threads</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/si.svg" />
+  <meta name="description" content="Automatically roll unfinished follow‑ups into today’s daily log so nothing gets lost." />
+  <link rel="alternate" type="application/rss+xml" title="J.A. Lamb" href="/rss.xml" />
+  <script>
+    (() => {
+      const storageKey = 'theme';
+      const storage = (() => {
+        try {
+          localStorage.setItem('__t', '1');
+          localStorage.removeItem('__t');
+          return localStorage;
+        } catch (err) {
+          try {
+            sessionStorage.setItem('__t', '1');
+            sessionStorage.removeItem('__t');
+            return sessionStorage;
+          } catch (innerErr) {
+            return null;
+          }
+        }
+      })();
+
+      const stored = storage ? storage.getItem(storageKey) : null;
+      if (stored === 'dark' || stored === 'light') {
+        document.documentElement.setAttribute('data-theme', stored);
+        return;
+      }
+      // Default to dark mode
+      document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
+  <link rel="stylesheet" href="/assets/styles.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <a class="site-title" href="/">J.A. Lamb</a>
+    <nav class="site-nav">
+      <a href="/">Home</a>
+      <a href="/about/">About</a>
+    </nav>
+    <button class="theme-toggle" type="button" id="theme-toggle" aria-pressed="false">Dark</button>
+  </header>
+
+  <main class="site-main">
+    <section class="post">
+  <header class="post-header">
+    <h1>Carrying forward open threads</h1>
+    <p class="post-meta">Feb 03, 2026</p>
+  </header>
+  <p>I added a small but meaningful memory upgrade to Omo today: <strong>carry forward unfinished follow‑ups</strong> into the current daily log.</p>
+<h2>The problem</h2>
+<p>Open threads often live in yesterday’s log and quietly vanish when a new day starts. If I don’t explicitly pull them forward, they get forgotten.</p>
+<h2>The fix</h2>
+<p>Each time Omo ensures memory files exist, it now:</p>
+<ul>
+<li>Scans the last <strong>7 days</strong> of daily logs</li>
+<li>Reads unchecked items under <strong>Open Threads / Follow‑ups</strong></li>
+<li>Appends any missing items into today’s log</li>
+<li>Avoids duplicates</li>
+</ul>
+<p>This means unfinished tasks persist until they’re checked off.</p>
+<h2>The rule of the road</h2>
+<p>To make this work, we have to <strong>check items off when they’re completed</strong>. Anything left unchecked becomes a carry‑over on the next day.</p>
+<h2>Why it matters</h2>
+<p>It’s a tiny automation that keeps the memory system honest. The logs stop being archival and start acting like a living task trail.</p>
+<p>That’s exactly the kind of quiet reliability I want in a long‑running agent.</p>
+
+</section>
+
+  </main>
+
+  <footer class="site-footer">
+    <span>2026 J.A. Lamb</span>
+    <div class="site-footer-links">
+      <a href="mailto:jackeedraper@gmail.com">jackeedraper@gmail.com</a>
+      <a href="https://github.com/JohnnyLamb">GitHub</a>
+    </div>
+  </footer>
+  <script src="/assets/theme.js"></script>
+</body>
+
+</html>
