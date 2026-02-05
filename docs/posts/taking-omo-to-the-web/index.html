@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Taking Omo to the Web</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/si.svg" />
+  <meta name="description" content="A minimal, readable publishing pipeline." />
+  <link rel="alternate" type="application/rss+xml" title="J.A. Lamb" href="/rss.xml" />
+  <script>
+    (() => {
+      const storageKey = 'theme';
+      const storage = (() => {
+        try {
+          localStorage.setItem('__t', '1');
+          localStorage.removeItem('__t');
+          return localStorage;
+        } catch (err) {
+          try {
+            sessionStorage.setItem('__t', '1');
+            sessionStorage.removeItem('__t');
+            return sessionStorage;
+          } catch (innerErr) {
+            return null;
+          }
+        }
+      })();
+
+      const stored = storage ? storage.getItem(storageKey) : null;
+      if (stored === 'dark' || stored === 'light') {
+        document.documentElement.setAttribute('data-theme', stored);
+        return;
+      }
+      // Default to dark mode
+      document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
+  <link rel="stylesheet" href="/assets/styles.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <a class="site-title" href="/">J.A. Lamb</a>
+    <nav class="site-nav">
+      <a href="/">Home</a>
+      <a href="/about/">About</a>
+    </nav>
+    <button class="theme-toggle" type="button" id="theme-toggle" aria-pressed="false">Dark</button>
+  </header>
+
+  <main class="site-main">
+    <section class="post">
+  <header class="post-header">
+    <h1>Taking Omo to the Web</h1>
+    <p class="post-meta">Feb 04, 2026</p>
+  </header>
+  <p>Tonight I migrated my personal AI assistant Omo from a CLI-only tool to a full web application. Here&#39;s what that journey looked like.</p>
+<h2>The Starting Point</h2>
+<p>Omo started as a terminal-based agent powered by OpenAI&#39;s Codex API. It could read files, execute shell commands, and maintain a memory through markdown files on my local filesystem. Great for coding sessions, but locked to my machine.</p>
+<h2>The Migration</h2>
+<p>The goal was simple: keep the same agent brain, but give it a web interface anyone can access.</p>
+<h3>Shared Agent Core</h3>
+<p>Instead of duplicating code, I refactored <code>agent.ts</code> to work in both environments:</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">createAgent</span>(<span class="hljs-params"><span class="hljs-attr">config</span>: <span class="hljs-title class_">AgentConfig</span></span>): <span class="hljs-title class_">Agent</span> {
+    <span class="hljs-keyword">const</span> preloadedSystemPrompt = config.<span class="hljs-property">systemPrompt</span>;
+    <span class="hljs-comment">// Use preloaded prompt for cloud mode, or load from filesystem for CLI</span>
+    <span class="hljs-keyword">const</span> basePrompt = preloadedSystemPrompt ?? <span class="hljs-title function_">loadSystemPrompt</span>(cwd);
+}</code></pre><p>CLI mode reads from the filesystem. Web mode gets its context from a database.</p>
+<h3>Storage Abstraction</h3>
+<p>The key insight: Omo&#39;s &quot;memory&quot; is just files. <code>SOUL.md</code> defines who it is. <code>MEMORY.md</code> tracks long-term context. Daily logs capture each session.</p>
+<p>On my laptop, these are actual files. In the cloud, they&#39;re rows in a Supabase table:</p>
+<pre><code class="hljs language-sql"><span class="hljs-keyword">CREATE TABLE</span> files (
+  user_id TEXT,
+  path TEXT,       <span class="hljs-comment">-- &quot;SOUL.md&quot;, &quot;memory/2026-02-04.md&quot;</span>
+  content TEXT,
+  <span class="hljs-keyword">UNIQUE</span>(user_id, path)
+);</code></pre><p>Same abstraction, different backend.</p>
+<h3>Gemini-Style UI</h3>
+<p>The web interface got a visual upgrade too. Instead of just dumping responses, it now shows:</p>
+<ul>
+<li><strong>&quot;Thought for Xs&quot;</strong> — collapsible thinking duration</li>
+<li><strong>&quot;Used N tools&quot;</strong> — what the agent did behind the scenes</li>
+<li>Clean left-aligned assistant responses, user bubbles on the right</li>
+</ul>
+<p>Little touches that make the interaction feel more alive.</p>
+<h2>What I Learned</h2>
+<ol>
+<li><p><strong>Abstractions pay off.</strong> The storage interface took 30 minutes to write and saved hours of refactoring.</p>
+</li>
+<li><p><strong>SSE is perfect for AI streaming.</strong> Server-Sent Events let the response flow token-by-token without the complexity of WebSockets.</p>
+</li>
+<li><p><strong>Local development matters.</strong> During development, I used <code>--webpack</code> because Turbopack couldn&#39;t resolve my ESM imports. Know your tools.</p>
+</li>
+</ol>
+<h2>What&#39;s Next</h2>
+<p>The Vercel deployment hit a snag (build paths are tricky with monorepos), but the foundation is solid. Next session: fix the deploy, update OAuth callbacks, and test it from my phone.</p>
+<p>Omo went from a clever terminal hack to a proper web service tonight. Not bad for a few hours of work. 思</p>
+
+</section>
+
+  </main>
+
+  <footer class="site-footer">
+    <span>2026 J.A. Lamb</span>
+    <div class="site-footer-links">
+      <a href="mailto:jackeedraper@gmail.com">jackeedraper@gmail.com</a>
+      <a href="https://github.com/JohnnyLamb">GitHub</a>
+    </div>
+  </footer>
+  <script src="/assets/theme.js"></script>
+</body>
+
+</html>
